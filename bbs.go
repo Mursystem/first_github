@@ -33,6 +33,7 @@ func reader(thisClient clientType) {
 	for {
 		// read in a message
 		mesgeType, p, err := thisClient.connection.ReadMessage()
+
 		if err != nil {
 			log.Println(err)
 			log.Println(thisClient.id)
@@ -47,7 +48,6 @@ func reader(thisClient clientType) {
 				}
 			}
 			allClientsSlice = RemoveIndex(allClientsSlice, removeIndex)
-
 			return
 		}
 		// print out that message for clarity
@@ -111,6 +111,9 @@ func RemoveIndex(s []clientType, index int) []clientType {
 func main() {
 	fmt.Println("Hello World")
 	setupRoutes()
+	if aport == "" {
+		aport = "5000"
+	}
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", aport), nil))
 
 }
