@@ -34,7 +34,7 @@ func reader(thisClient clientType) {
 	for {
 		// read in a message
 		_, p, err := thisClient.connection.ReadMessage()
-
+		p = append(p, 13)
 		if err != nil {
 			log.Println(err)
 			//log.Println(thisClient.id)
@@ -55,7 +55,7 @@ func reader(thisClient clientType) {
 
 		//log.Println(string(p))
 		//if err := conn.WriteMessage(messageType, p); err != nil {
-		if err := thisClient.connection.WriteMessage(1, []byte("Blue Tick\n")); err != nil {
+		if err := thisClient.connection.WriteMessage(1, []byte("✔")); err != nil {
 			log.Println(err)
 			return
 		}
@@ -63,13 +63,14 @@ func reader(thisClient clientType) {
 		for _, oneClient := range allClientsSlice {
 			//print all contected client id's
 			fmt.Println(oneClient.id)
-			oneClient.connection.WriteMessage(1, []byte(p))
+			oneClient.connection.WriteMessage(1, ([]byte(p)))
 		}
 
 	}
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, r.URL.Path[1:])
 	fmt.Fprintf(w, "App running and serving wss")
 }
 
