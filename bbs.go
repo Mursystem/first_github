@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gorilla/websocket"
 )
@@ -32,18 +33,18 @@ var upgrader = websocket.Upgrader{
 func reader(thisClient clientType) {
 	for {
 		// read in a message
-		mesgeType, p, err := thisClient.connection.ReadMessage()
+		_, p, err := thisClient.connection.ReadMessage()
 
 		if err != nil {
 			log.Println(err)
-			log.Println(thisClient.id)
+			//log.Println(thisClient.id)
 			//remove the disconected user
 			thisIndex := -1
 			var removeIndex int
 			for _, oneClient := range allClientsSlice {
 				thisIndex++
 				if oneClient.id == thisClient.id {
-					println(thisIndex)
+					//println(thisIndex)
 					removeIndex = thisIndex
 				}
 			}
@@ -51,24 +52,25 @@ func reader(thisClient clientType) {
 			return
 		}
 		// print out that message for clarity
-		log.Println(mesgeType)
-		log.Println(string(p))
+
+		//log.Println(string(p))
 		//if err := conn.WriteMessage(messageType, p); err != nil {
-		if err := thisClient.connection.WriteMessage(1, []byte("Recieved")); err != nil {
+		if err := thisClient.connection.WriteMessage(1, []byte("Blue Tick\n")); err != nil {
 			log.Println(err)
 			return
 		}
 
 		for _, oneClient := range allClientsSlice {
+			//print all contected client id's
 			fmt.Println(oneClient.id)
-			oneClient.connection.WriteMessage(1, []byte("A change was made by a user"))
+			oneClient.connection.WriteMessage(1, []byte(p))
 		}
 
 	}
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Home Page")
+	fmt.Fprintf(w, "App running and serving wss")
 }
 
 func wsEndpoint(w http.ResponseWriter, r *http.Request) {
@@ -87,8 +89,8 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 	allClientsSlice = append(allClientsSlice, newClient)
 
 	log.Println("Client Connected")
-
-	err = ws.WriteMessage(1, []byte("Hi Client!"))
+	connectStringRdy := "Welcome, your id is " + strconv.Itoa(newClient.id) + "\n"
+	err = newClient.connection.WriteMessage(1, []byte(connectStringRdy))
 	if err != nil {
 		log.Println(err)
 	}
