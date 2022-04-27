@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/websocket"
 )
+
+var aport string = os.Getenv("PORT")
 
 // We'll need to define an Upgrader
 // this will require a Read and Write buffer size
@@ -108,5 +111,5 @@ func RemoveIndex(s []clientType, index int) []clientType {
 func main() {
 	fmt.Println("Hello World")
 	setupRoutes()
-	log.Fatal(http.ListenAndServe(":2555", nil))
+	log.Fatal(http.ListenAndServe(aport, nil))
 }
