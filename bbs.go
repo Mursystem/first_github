@@ -111,5 +111,5 @@ func RemoveIndex(s []clientType, index int) []clientType {
 func main() {
 	fmt.Println("Hello World")
 	setupRoutes()
-	log.Fatal(http.ListenAndServe(aport, nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
