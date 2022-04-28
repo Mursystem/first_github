@@ -72,8 +72,8 @@
             inputBar.value = "";
           }
         }         
-        //let socket = new WebSocket("wss://bbs-666-qq.herokuapp.com/ws");
-        let socket = new WebSocket("ws://localhost:5000/ws");
+        let socket = new WebSocket("wss://bbs-666-qq.herokuapp.com/ws");
+        //let socket = new WebSocket("ws://localhost:5000/ws");
         console.log("Attempting Connection...");
         let connection = false;
         socket.onopen = () => {
